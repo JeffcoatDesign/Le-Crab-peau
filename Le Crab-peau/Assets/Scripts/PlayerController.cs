@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [Header("Components")]
     public Rigidbody rig;
     public Player photonPlayer;
+    public TextMeshPro nameText;
 
     [PunRPC]
     public void Initialize (Player player)
@@ -28,6 +30,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         id = player.ActorNumber;
 
         GameManager.instance.players[id - 1] = this;
+
+        nameText.text = PhotonNetwork.PlayerList[id - 1].NickName;
 
         //give first player the hat
         if (id == 1)
@@ -39,6 +43,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     void Update()
     {
+        if (nameText != null)
+        {
+            nameText.transform.LookAt(Camera.main.transform.position);
+            nameText.transform.Rotate(0, 180, 0);
+        }
+
         if(PhotonNetwork.IsMasterClient)
         {
             if(curHatTime >= GameManager.instance.timeToWin && !GameManager.instance.gameEnded)
