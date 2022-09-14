@@ -12,8 +12,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     [Header("Info")]
     public float moveSpeed;
+    public float rotationSpeed;
     public float jumpForce;
+    public float minY;
     public GameObject hatObject;
+    public Vector3 respawnPoint;
 
     [HideInInspector]
     public float curHatTime;
@@ -70,9 +73,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
                 curHatTime += Time.deltaTime;
 
             //respawn on fall
-            if(rig.position.y < -5)
+            if(rig.position.y < minY)
             {
-                rig.position = new Vector3(0, 2, 0);
+                rig.position = respawnPoint;
             }
         }
     }
@@ -81,8 +84,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     {
         float x = Input.GetAxis("Horizontal") * moveSpeed;
         float z = Input.GetAxis("Vertical") * moveSpeed;
+        if (Input.GetAxis("Vertical") < 0)
+            RotateTo(0);
+        else if (Input.GetAxis("Vertical") > 0)
+            RotateTo(180);
+        else if (Input.GetAxis("Horizontal") < 0)
+            RotateTo(90);
+        else if (Input.GetAxis("Horizontal") > 0)
+            RotateTo(270);
 
-        rig.velocity = new Vector3(x, rig.velocity.y, z);
+            rig.velocity = new Vector3(x, rig.velocity.y, z);
     }
 
     void TryJump ()
@@ -93,6 +104,28 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             rig.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+    }
+
+    void RotateTo (int targetAngle)
+    {
+        int currentAngle = (int) rig.transform.eulerAngles.y;
+        int angleDifference;
+        currentAngle = currentAngle % 360;
+        angleDifference = modulo((targetAngle - currentAngle), 360);
+        Debug.Log("Angle Difference: " + angleDifference);
+        if (currentAngle != targetAngle)
+        {
+            if (angleDifference > 180)
+                rig.transform.Rotate(0, 360 - rotationSpeed, 0);
+            else
+                rig.transform.Rotate(0, rotationSpeed, 0);
+        }
+    }
+
+    //gets the modulo of an interger and a modulus
+    int modulo (int x, int m)
+    {
+        return (x % m + m) % m;
     }
 
     public void SetHat (bool hasHat)
