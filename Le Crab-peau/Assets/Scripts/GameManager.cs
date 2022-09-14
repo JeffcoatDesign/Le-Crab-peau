@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Transform[] spawnPoints;
     public PlayerController[] players;
     public int playerWithHat;
-    private int playersInGame;
+    private int playersInGame = 0;
 
     //instance
     public static GameManager instance;
