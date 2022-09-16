@@ -8,9 +8,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     // instance
     public static NetworkManager instance;
-    //public byte maxPlayers;
 
-    //private RoomOptions roomOptions;
+    private RoomOptions roomOptions;
 
     void Awake()
     {
@@ -27,13 +26,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void Start ()
     {
         PhotonNetwork.ConnectUsingSettings();
-        //roomOptions.MaxPlayers = maxPlayers;
+        roomOptions.MaxPlayers = 4;
     }
 
     public void CreateRoom(string roomName)
     {
-        PhotonNetwork.CreateRoom(roomName);
-        //PhotonNetwork.CreateRoom(roomName, roomOptions, null);
+        //PhotonNetwork.CreateRoom(roomName);
+        PhotonNetwork.CreateRoom(roomName, roomOptions);
     }
 
     public void JoinRoom(string roomName)
