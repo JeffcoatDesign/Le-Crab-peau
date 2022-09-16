@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     // instance
     public static NetworkManager instance;
-
-    private RoomOptions roomOptions;
 
     void Awake()
     {
@@ -26,13 +23,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void Start ()
     {
         PhotonNetwork.ConnectUsingSettings();
-        roomOptions.MaxPlayers = 4;
     }
 
     public void CreateRoom(string roomName)
     {
-        //PhotonNetwork.CreateRoom(roomName);
-        PhotonNetwork.CreateRoom(roomName, roomOptions);
+        PhotonNetwork.CreateRoom(roomName);
     }
 
     public void JoinRoom(string roomName)
