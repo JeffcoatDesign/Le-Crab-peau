@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         currentAngle = currentAngle % 360;
         angleDifference = modulo((targetAngle - currentAngle), 360);
         Debug.Log("Angle Difference: " + angleDifference);
-        if (currentAngle != targetAngle)
+        if (currentAngle > targetAngle + 2 || currentAngle < targetAngle - 2)
         {
             if (angleDifference > 180)
                 rig.transform.Rotate(0, 360 - rotationSpeed, 0);
